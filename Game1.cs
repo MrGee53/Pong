@@ -48,9 +48,9 @@ namespace JankyPong
 
             paddleSprite = Content.Load<Texture2D>("testPaddle");
 
-            paddlePos = new Vector2(
-                GraphicsDevice.Viewport.Width / 2 - paddleSprite.Width / 2 ,
-                GraphicsDevice.Viewport.Height - paddleSprite.Height
+            ballPos = new Vector2(
+                GraphicsDevice.Viewport.Width / 2 - ballSprite.Width / 2 ,
+                GraphicsDevice.Viewport.Height / 2 - ballSprite.Height / 2
                 );
         }
 
@@ -70,23 +70,44 @@ namespace JankyPong
             // Check if ball is hitting a wall
             if (ballPos.X > maxX || ballPos.X < 0)
                 ballSpeed.X *= -1;
-
-            if (ballPos.Y < 0)
+             
+            if (ballPos.Y > maxY || ballPos.Y < 0)
                 ballSpeed.Y *= -1;
-            else if (ballPos.Y > maxY)
+            
+            // Check if the ball hit the paddle
+            Rectangle ballRect =
+                new Rectangle((int)ballPos.X, (int)ballPos.Y,
+                paddleSprite.Width, paddleSprite.Height);
+
+            Rectangle paddleRect =
+                new Rectangle((int)paddlePos.X, (int)paddlePos.Y,
+                paddleSprite.Width, paddleSprite.Height);
+
+            if (ballRect.Intersects(paddleRect) && ballSpeed.Y > 0)
             {
-                // Ball hit bottom of the screen so reset ball
-                ballPos.Y = 0;
-                ballSpeed.X = 150;
-                ballSpeed.Y = 150;
+                // Increase speed
+                ballSpeed.Y += 50;
+                if (ballSpeed.X < 0)
+                    ballSpeed.X -= 50;
+                else
+                    ballSpeed.X += 50;
+
+                // Send ball back up the screen
+                ballSpeed.X *= -1;
             }
+
+            // Keep the paddle on screen
+            if (paddlePos.Y < 0)
+                paddlePos.Y = 0;
+            if (paddlePos.Y > maxY - paddleSprite.Height / 2)
+                paddlePos.Y = maxY - paddleSprite.Height /2;
 
             // Check for Input
             KeyboardState keyState = Keyboard.GetState();
-            if (keyState.IsKeyDown(Keys.Right))
-                paddlePos.X += 5;
-            else if (keyState.IsKeyDown(Keys.Left))
-                paddlePos.X -= 5;
+            if (keyState.IsKeyDown(Keys.Down))
+                paddlePos.Y += 5;
+            else if (keyState.IsKeyDown(Keys.Up))
+                paddlePos.Y -= 5;
 
             base.Update(gameTime);
         }
