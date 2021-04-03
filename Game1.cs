@@ -68,8 +68,16 @@ namespace JankyPong
             int maxY = GraphicsDevice.Viewport.Height - ballSprite.Height;
 
             // Check if ball is hitting a wall
-            if (ballPos.X > maxX || ballPos.X < 0)
+            if (ballPos.X > maxX)
                 ballSpeed.X *= -1;
+
+            if (ballPos.X < 0)
+            {
+                ballPos.X = maxX / 2;
+                ballPos.Y = maxY / 2;
+                ballSpeed.X = 150;
+                ballSpeed.Y = 150;
+            }
              
             if (ballPos.Y > maxY || ballPos.Y < 0)
                 ballSpeed.Y *= -1;
@@ -83,7 +91,7 @@ namespace JankyPong
                 new Rectangle((int)paddlePos.X, (int)paddlePos.Y,
                 paddleSprite.Width, paddleSprite.Height);
 
-            if (ballRect.Intersects(paddleRect) && ballSpeed.Y > 0)
+            if (ballRect.Intersects(paddleRect) && ballSpeed.X < 0)
             {
                 // Increase speed
                 ballSpeed.Y += 50;
