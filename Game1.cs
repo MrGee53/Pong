@@ -10,7 +10,8 @@ namespace JankyPong
         private SpriteBatch _spriteBatch;
 
         private Ball ball;
-        private Paddle paddle;
+        private Paddle paddle1;
+        private Paddle paddle2;
 
         public Game1()
         {
@@ -18,10 +19,13 @@ namespace JankyPong
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            paddle = new Paddle(this);
+            paddle1 = new Paddle(this, false);
+            paddle2 = new Paddle(this, true);
             ball = new Ball(this);
 
-            Components.Add(paddle);
+
+            Components.Add(paddle1);
+            Components.Add(paddle2);
             Components.Add(ball);
         }
 
@@ -37,6 +41,7 @@ namespace JankyPong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -50,7 +55,7 @@ namespace JankyPong
 
             // Check if ball is hitting a wall
             if (ball.X > maxX - ball.Width)
-                ball.ChangeHorzDirection();
+                ball.Reset();
             else if (ball.X < 0)
                 ball.Reset();
 
@@ -61,7 +66,13 @@ namespace JankyPong
 
 
             // Check if the ball is hitting the paddle
-            if (ball.Boundary.Intersects(paddle.Boundary) && ball.SpeedX < 0)
+            if (ball.Boundary.Intersects(paddle1.Boundary) && ball.SpeedX < 0)
+            {
+                ball.SpeedUp();
+
+                ball.ChangeHorzDirection();
+            }
+            else if (ball.Boundary.Intersects(paddle2.Boundary) && ball.SpeedX > 0)
             {
                 ball.SpeedUp();
 

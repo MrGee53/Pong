@@ -16,6 +16,9 @@ namespace JankyPong
         private SpriteBatch spriteBatch;
         private readonly ContentManager contentManager;
 
+        // Bool to see if player 2
+        private bool isPlayer2;
+
         // Paddle Sprite
         private Texture2D paddleSprite;
 
@@ -78,10 +81,11 @@ namespace JankyPong
         }
         #endregion
 
-        public Paddle(Game game)
+        public Paddle(Game game, bool player2)
             : base(game)
         {
             contentManager = new ContentManager(game.Services);
+            isPlayer2 = player2;
         }
 
         /// <summary>
@@ -92,10 +96,14 @@ namespace JankyPong
         public override void Initialize()
         {
             base.Initialize();
-            
+
             // Make sure base.Initialize() is called before this or 
             // paddleSprite will be null.
-            X = 0;
+            
+            if (isPlayer2)
+                X = GraphicsDevice.Viewport.Width - paddleSprite.Width;
+            else
+                X = 0;
             Y = (GraphicsDevice.Viewport.Height - Height) / 2;
 
             Speed = DEFAULT_Y_SPEED;
@@ -109,7 +117,10 @@ namespace JankyPong
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            
             paddleSprite = contentManager.Load<Texture2D>(@"Content\testPaddle");
+
+
         }
 
         /// <summary>
@@ -126,14 +137,28 @@ namespace JankyPong
 
             // Move the paddle, but don't allow movement off the screen
             KeyboardState newKeyState = Keyboard.GetState();
-            if (newKeyState.IsKeyDown(Keys.Down) && Y + 
-                paddleSprite.Width + moveDistance <= GraphicsDevice.Viewport.Height)
+            if (isPlayer2)
             {
-                Y += moveDistance;
+                if (newKeyState.IsKeyDown(Keys.Down) && Y +
+                    paddleSprite.Width + moveDistance <= GraphicsDevice.Viewport.Height)
+                {
+                    Y += moveDistance;
+                }
+                else if (newKeyState.IsKeyDown(Keys.Up) && Y - moveDistance >= 0)
+                {
+                    Y -= moveDistance;
+                }
             }
-            else if (newKeyState.IsKeyDown(Keys.Up) && Y - moveDistance >= 0)
-            {
-                Y -= moveDistance;
+            else {
+                if (newKeyState.IsKeyDown(Keys.S) && Y +
+                    paddleSprite.Width + moveDistance <= GraphicsDevice.Viewport.Height)
+                {
+                    Y += moveDistance;
+                }
+                else if (newKeyState.IsKeyDown(Keys.W) && Y - moveDistance >= 0)
+                {
+                    Y -= moveDistance;
+                } 
             }
 
             base.Update(gameTime);
