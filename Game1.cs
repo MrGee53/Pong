@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace JankyPong
 {
@@ -12,6 +13,9 @@ namespace JankyPong
         private Ball ball;
         private Paddle paddle1;
         private Paddle paddle2;
+
+        private SoundEffect crashSound;
+        private SoundEffect scoreSound;
 
         public Game1()
         {
@@ -41,6 +45,9 @@ namespace JankyPong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            crashSound = Content.Load<SoundEffect>("hit");
+            scoreSound = Content.Load<SoundEffect>("score");
             
         }
 
@@ -55,14 +62,28 @@ namespace JankyPong
 
             // Check if ball is hitting a wall
             if (ball.X > maxX - ball.Width)
+            {
+
+
+                scoreSound.Play();
                 ball.Reset();
+            }
             else if (ball.X < 0)
+            {
+                scoreSound.Play();
                 ball.Reset();
+            }
 
             if (ball.Y > maxY - ball.Height)
+            {
                 ball.ChangeVertDirection();
+                crashSound.Play();
+            }
             else if (ball.Y < 0)
+            {
                 ball.ChangeVertDirection();
+                crashSound.Play();
+            }
 
 
             // Check if the ball is hitting the paddle
@@ -71,12 +92,16 @@ namespace JankyPong
                 ball.SpeedUp();
 
                 ball.ChangeHorzDirection();
+
+                crashSound.Play();
             }
             else if (ball.Boundary.Intersects(paddle2.Boundary) && ball.SpeedX > 0)
             {
                 ball.SpeedUp();
 
                 ball.ChangeHorzDirection();
+
+                crashSound.Play();
             }
 
             base.Update(gameTime);
