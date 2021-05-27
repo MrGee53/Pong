@@ -10,6 +10,7 @@ namespace JankyPong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        private Score score;
         private Ball ball;
         private Paddle paddle1;
         private Paddle paddle2;
@@ -26,11 +27,13 @@ namespace JankyPong
             paddle1 = new Paddle(this, false);
             paddle2 = new Paddle(this, true);
             ball = new Ball(this);
+            score = new Score(this);
 
 
             Components.Add(paddle1);
             Components.Add(paddle2);
             Components.Add(ball);
+            Components.Add(score);
         }
 
         protected override void Initialize()
@@ -67,11 +70,13 @@ namespace JankyPong
 
                 scoreSound.Play();
                 ball.Reset();
+                score.Player1Score++;
             }
             else if (ball.X < 0)
             {
                 scoreSound.Play();
                 ball.Reset();
+                score.Player2Score++;
             }
 
             if (ball.Y > maxY - ball.Height)
