@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-namespace JankyPong
+namespace Pong
 {
     class Score : Microsoft.Xna.Framework.DrawableGameComponent
     {
