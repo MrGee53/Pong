@@ -140,7 +140,7 @@ namespace Pong
             if (isPlayer2)
             {
                 if (newKeyState.IsKeyDown(Keys.Down) && Y +
-                    paddleSprite.Width + moveDistance <= GraphicsDevice.Viewport.Height)
+                    paddleSprite.Height + moveDistance <= GraphicsDevice.Viewport.Height)
                 {
                     Y += moveDistance;
                 }
@@ -151,7 +151,7 @@ namespace Pong
             }
             else {
                 if (newKeyState.IsKeyDown(Keys.S) && Y +
-                    paddleSprite.Width + moveDistance <= GraphicsDevice.Viewport.Height)
+                    paddleSprite.Height + moveDistance <= GraphicsDevice.Viewport.Height)
                 {
                     Y += moveDistance;
                 }
