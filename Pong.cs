@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 
-namespace JankyPong
+namespace Pong
 {
-    public class Game1 : Game
+    public class PongGame : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -18,7 +18,7 @@ namespace JankyPong
         private SoundEffect crashSound;
         private SoundEffect scoreSound;
 
-        public Game1()
+        public PongGame()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
